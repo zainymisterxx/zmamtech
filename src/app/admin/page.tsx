@@ -1,9 +1,9 @@
 "use client"
 
-import { useState } from "react"
-import type { FormEvent } from "react"
+import { useState, type FormEvent } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
+import { createClient } from "@/lib/supabaseClient"
 import { Input } from "@/components/input"
 import Button from "@/components/button"
 
@@ -20,12 +20,19 @@ export default function LoginPage() {
     setError("")
 
     try {
-      // Demo authentication matching previous behavior
-      if (email === "admin@test.com" && password === "123456") {
-        router.push("/dashboard")
-      } else {
-        setError("Invalid email address or password")
+      const supabase = createClient()
+      const { error: signInError } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      })
+
+      if (signInError) {
+        setError(signInError.message || "Invalid email address or password")
+        return
       }
+
+      router.push("/admin/dashboard")
+      router.refresh()
     } catch (err) {
       console.error(err)
       setError("An unexpected error occurred. Please try again.")
@@ -35,23 +42,23 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-base-section flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gray-100 dark:bg-neutral-800 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md text-center">
         <Link href="/" className="inline-block">
-          <span className="font-heading text-3xl font-bold tracking-tight text-text-primary">
+          <span className="font-heading text-3xl font-bold tracking-tight text-black dark:text-white">
             ZMAM<span className="text-brand-gold">TECH</span>
           </span>
         </Link>
-        <h2 className="mt-6 text-2xl font-heading font-bold text-text-primary">
+        <h2 className="mt-6 text-2xl font-heading font-bold text-black dark:text-white">
           Admin Console
         </h2>
-        <p className="mt-2 text-sm text-text-body">
+        <p className="mt-2 text-sm text-gray-700 dark:text-gray-300">
           Sign in to manage your portfolio and services
         </p>
       </div>
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="bg-white py-8 px-4 border border-base-border shadow-soft rounded-2xl sm:px-10">
+        <div className="bg-white dark:bg-neutral-900 py-8 px-4 border border-gray-200 dark:border-neutral-800 shadow-soft rounded-xl sm:px-10">
           <form className="space-y-6" onSubmit={handleLogin}>
             {error && (
               <div className="bg-red-50 text-red-600 text-sm p-4 rounded-xl border border-red-100">
@@ -81,7 +88,7 @@ export default function LoginPage() {
               onChange={(e) => setPassword(e.target.value)}
             />
 
-            <div className="text-xs text-text-light flex justify-between items-center">
+            <div className="text-xs text-gray-500 dark:text-gray-400 flex justify-between items-center">
               <span>Demo credentials: admin@test.com / 123456</span>
             </div>
 

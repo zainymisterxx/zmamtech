@@ -20,7 +20,7 @@ export default function Button({
     primary:
       "bg-brand-gold text-white hover:bg-brand-goldHover hover:shadow-hover active:scale-[0.97]",
     secondary:
-      "bg-text-primary text-white hover:bg-text-secondary hover:shadow-hover active:scale-[0.97]",
+      "bg-slate-900 text-white hover:bg-slate-700 hover:shadow-hover active:scale-[0.97] dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-300",
     outline:
       "border-2 border-brand-gold text-brand-gold hover:bg-brand-gold hover:text-white active:scale-[0.97]",
   }

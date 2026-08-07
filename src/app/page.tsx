@@ -1,8 +1,9 @@
 import Navbar from "@/components/navbar"
 import Footer from "@/components/footer"
 import HeroSection from "@/sections/home/hero"
-import ProjectsSection from "@/sections/home/projects"
+import ClientsSection from "@/sections/home/clients"
 import ServicesSection from "@/sections/home/services"
+import SolutionsSection from "@/sections/home/solutions"
 
 export default function HomePage() {
   return (
@@ -11,11 +12,12 @@ export default function HomePage() {
 
       <main>
         <HeroSection />
-        <ProjectsSection />
+        <ClientsSection />
         <ServicesSection />
+        <SolutionsSection />
 
         {/* CTA Banner */}
-        <section className="bg-text-primary py-24 sm:py-28" id="cta-banner">
+        <section className="bg-slate-900 dark:bg-slate-950 py-24 sm:py-28" id="cta-banner">
           <div className="mx-auto max-w-7xl px-6 sm:px-8 lg:px-12 text-center">
             <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-bold text-white leading-tight">
               Ready to Build Something{" "}
@@ -30,13 +32,13 @@ export default function HomePage() {
                 href="/public/contact"
                 className="inline-flex items-center px-9 py-4 rounded-xl bg-brand-gold text-white text-lg font-semibold transition-all duration-300 hover:bg-brand-goldHover hover:shadow-hover active:scale-[0.97]"
               >
-                Start a Project
+                Become a Client
               </a>
               <a
-                href="/public/projects"
+                href="/public/clients"
                 className="inline-flex items-center px-9 py-4 rounded-xl border-2 border-white/20 text-white text-lg font-semibold transition-all duration-300 hover:bg-white/10 active:scale-[0.97]"
               >
-                Explore Our Work
+                View Our Clients
               </a>
             </div>
           </div>

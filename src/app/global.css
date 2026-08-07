@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 /* ──────────────────────────────────────────────
    ZMAMTECH Design System — Tailwind v4 Theme
    ────────────────────────────────────────────── */
@@ -80,8 +82,6 @@
 
 body {
   font-family: var(--font-sans);
-  color: var(--color-text-primary);
-  background-color: var(--color-base-white);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
