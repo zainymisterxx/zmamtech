@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server"
 import { Resend } from "resend"
+import { getSiteSettings, getSettingValue } from "@/lib/settings"
 
 const resend = new Resend(process.env.RESEND_API_KEY)
 
@@ -21,8 +22,11 @@ export async function POST(req: Request) {
       )
     }
 
+    const settings = await getSiteSettings()
+    const brandName = getSettingValue(settings, "branding.brand_name", "ZMAMTECH")
+
     const data = await resend.emails.send({
-      from: "ZMAMTECH Contact Form <onboarding@resend.dev>", // Or use a verified domain
+      from: `${brandName} Contact Form <onboarding@resend.dev>`, // Or use a verified domain
       to: "zainy.mister@icloud.com",
       subject: subject || `New Inquiry from ${name}`,
       replyTo: email,

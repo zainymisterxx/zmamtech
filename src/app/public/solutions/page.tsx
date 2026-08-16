@@ -4,10 +4,16 @@ import Footer from "@/components/footer"
 import Container from "@/components/container"
 import { createClient } from "@/lib/supabaseServer"
 
-export const metadata: Metadata = {
-  title: "Solutions",
-  description:
-    "Enterprise-grade software solutions from ZMAMTECH to streamline your business operations and accelerate growth.",
+import { getSiteSettings, getSettingValue } from "@/lib/settings"
+
+export async function generateMetadata(): Promise<Metadata> {
+  const settings = await getSiteSettings()
+  const brandName = getSettingValue(settings, "branding.brand_name", "ZMAMTECH")
+  
+  return {
+    title: "Solutions",
+    description: `Enterprise-grade software solutions from ${brandName} to streamline your business operations and accelerate growth.`,
+  }
 }
 
 const fallbackSolutions = [

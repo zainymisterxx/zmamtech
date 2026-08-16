@@ -15,20 +15,29 @@ const grotesk = Space_Grotesk({
   display: "swap",
 })
 
-export const metadata: Metadata = {
-  title: {
-    default: "ZMAMTECH | Custom Software Development UAE",
-    template: "%s | ZMAMTECH",
-  },
-  description:
-    "20+ years of software excellence delivering custom software, web development, mobile applications and enterprise solutions. Based in UAE, serving clients since 2006.",
-  keywords: ["software development UAE", "custom software", "web development", "mobile app development", "enterprise solutions", "ZMAMTECH"],
-  openGraph: {
-    title: "ZMAMTECH | Custom Software Development UAE",
-    description: "20+ years of software excellence. Transforming ideas into scalable, robust software solutions trusted since 2006.",
-    type: "website",
-    locale: "en_US",
-  },
+import { getSiteSettings, getSettingValue } from "@/lib/settings"
+
+export async function generateMetadata(): Promise<Metadata> {
+  const settings = await getSiteSettings()
+  
+  const brandName = getSettingValue(settings, "branding.brand_name", "ZMAMTECH")
+  const faviconUrl = getSettingValue(settings, "branding.favicon_url", "")
+  
+  return {
+    title: {
+      default: `${brandName} | Custom Software Development UAE`,
+      template: `%s | ${brandName}`,
+    },
+    description: "20+ years of software excellence delivering custom software, web development, mobile applications and enterprise solutions. Based in UAE, serving clients since 2006.",
+    keywords: ["software development UAE", "custom software", "web development", "mobile app development", "enterprise solutions", brandName],
+    openGraph: {
+      title: `${brandName} | Custom Software Development UAE`,
+      description: "20+ years of software excellence. Transforming ideas into scalable, robust software solutions trusted since 2006.",
+      type: "website",
+      locale: "en_US",
+    },
+    icons: faviconUrl ? { icon: faviconUrl } : { icon: [] },
+  }
 }
 
 export default function RootLayout({

@@ -1,7 +1,10 @@
 import { createClient } from "@/lib/supabaseServer"
+import { getSiteSettings, getSettingValue } from "@/lib/settings"
 
 export default async function DashboardPage() {
   const supabase = await createClient()
+  const settings = await getSiteSettings()
+  const brandName = getSettingValue(settings, "branding.brand_name", "ZMAMTECH")
 
   // Fetch true counts from database
   const { count: clientsCount } = await supabase.from("clients").select("*", { count: "exact", head: true })
@@ -18,7 +21,7 @@ export default async function DashboardPage() {
           Dashboard
         </h1>
         <p className="mt-2 text-gray-700 dark:text-gray-300">
-          Manage your ZMAMTECH website content and business information.
+          Manage your {brandName} website content and business information.
         </p>
       </div>
 

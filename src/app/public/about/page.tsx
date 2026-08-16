@@ -4,10 +4,17 @@ import Footer from "@/components/footer"
 import Container from "@/components/container"
 import { createClient } from "@/lib/supabaseServer"
 
-export const metadata: Metadata = {
-  title: "About",
-  description:
-    "Learn about ZMAMTECH (Standby Computer Program Devices LLC) — 20+ years of software excellence.",
+import { getSiteSettings, getSettingValue } from "@/lib/settings"
+
+export async function generateMetadata(): Promise<Metadata> {
+  const settings = await getSiteSettings()
+  const brandName = getSettingValue(settings, "branding.brand_name", "ZMAMTECH")
+  const companyName = getSettingValue(settings, "branding.company_name", "Standby Computer Program Devices LLC")
+  
+  return {
+    title: "About",
+    description: `Learn about ${brandName} (${companyName}) — 20+ years of software excellence.`,
+  }
 }
 
 const values = [
@@ -78,6 +85,26 @@ export default async function AboutPage() {
     }
   }
 
+  const { getSiteSettings, getSettingValue } = await import("@/lib/settings")
+  const settings = await getSiteSettings()
+  
+  const heading = getSettingValue(settings, "about.heading", "Building Digital Success Since 2006")
+  
+  const brandName = getSettingValue(settings, "branding.brand_name", "ZMAMTECH")
+  const companyName = getSettingValue(settings, "branding.company_name", "Standby Computer Program Devices LLC")
+  
+  const content = getSettingValue(settings, "about.content", `${brandName} is the premier brand of **${companyName}**, a leading software agency based in the UAE.\n\nWith over 20 years of experience, we specialize in designing and building scalable digital solutions for clients globally.\n\nOur team combines deep technical expertise with creative thinking to deliver solutions that not only look stunning but also perform exceptionally. Operating across the UAE, Oman, and Pakistan, we bring world-class enterprise software development to your doorstep.`)
+  const contentParagraphs = content.split('\n\n')
+  
+  const cmsValues = getSettingValue(settings, "about.values", values.map(v => ({ title: v.title, description: v.description })))
+  
+  const cmsStats = getSettingValue(settings, "about.stats", [
+    { value: "100+", label: "Clients Served" },
+    { value: "3", label: "Countries Served" },
+    { value: "20+", label: "Years Experience" },
+    { value: "98%", label: "Client Satisfaction" },
+  ])
+
   return (
     <>
       <Navbar />
@@ -90,18 +117,33 @@ export default async function AboutPage() {
                 About Us
               </span>
               <h1 className="font-heading text-4xl sm:text-5xl lg:text-6xl font-bold text-slate-900 dark:text-slate-50 leading-tight animate-fade-in-up">
-                Building <span className="text-gold-gradient">Digital Success</span> Since 2006
+                {heading.includes("**") ? (
+                  <>
+                    {heading.split("**")[0]}
+                    <span className="text-gold-gradient">{heading.split("**")[1]}</span>
+                    {heading.split("**")[2]}
+                  </>
+                ) : heading === "Building Digital Success Since 2006" ? (
+                  <>
+                    Building <span className="text-gold-gradient">Digital Success</span> Since 2006
+                  </>
+                ) : (
+                  heading
+                )}
               </h1>
-              <p className="mt-6 text-slate-700 dark:text-slate-300 text-lg leading-relaxed animate-fade-in-up stagger-1">
-                ZMAMTECH is the premier brand of <strong>Standby Computer Program Devices LLC</strong>, a leading software agency based in the UAE. 
-                With over 20 years of experience, we specialize in designing and building scalable digital solutions for clients globally.
-              </p>
-              <p className="mt-4 text-slate-700 dark:text-slate-300 text-lg leading-relaxed animate-fade-in-up stagger-2">
-                Our team combines deep technical expertise with creative thinking to
-                deliver solutions that not only look stunning but also perform
-                exceptionally. Operating across the UAE, Oman, and Pakistan, we bring 
-                world-class enterprise software development to your doorstep.
-              </p>
+              {contentParagraphs.map((paragraph: string, idx: number) => (
+                <p key={idx} className={`mt-${idx === 0 ? '6' : '4'} text-slate-700 dark:text-slate-300 text-lg leading-relaxed animate-fade-in-up stagger-${idx + 1}`}>
+                  {paragraph.includes("**") ? (
+                    <>
+                      {paragraph.split("**")[0]}
+                      <strong>{paragraph.split("**")[1]}</strong>
+                      {paragraph.split("**")[2]}
+                    </>
+                  ) : (
+                    paragraph
+                  )}
+                </p>
+              ))}
             </div>
           </Container>
         </section>
@@ -110,12 +152,7 @@ export default async function AboutPage() {
         <section className="bg-slate-900 dark:bg-slate-950 py-16" id="about-stats">
           <Container>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-              {[
-                { value: "100+", label: "Clients Served" },
-                { value: "3", label: "Countries Served" },
-                { value: "20+", label: "Years Experience" },
-                { value: "98%", label: "Client Satisfaction" },
-              ].map((stat) => (
+              {cmsStats.map((stat: {value: string, label: string}) => (
                 <div key={stat.label} className="animate-scale-in">
                   <div className="font-heading text-4xl sm:text-5xl font-bold text-brand-gold">
                     {stat.value}
@@ -140,27 +177,30 @@ export default async function AboutPage() {
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-7">
-              {values.map((item, idx) => (
-                <div
-                  key={item.title}
-                  className={`
-                    group bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-7
-                    shadow-soft transition-all duration-500
-                    hover:shadow-elevated hover:-translate-y-1
-                    animate-fade-in-up stagger-${idx + 1}
-                  `}
-                >
-                  <div className="w-12 h-12 rounded-xl bg-brand-goldLight flex items-center justify-center text-brand-gold mb-5 transition-all duration-300 group-hover:bg-brand-gold group-hover:text-white">
-                    {item.icon}
+              {cmsValues.map((item: {title: string, description: string}, idx: number) => {
+                const originalValue = values.find(v => v.title === item.title) || values[idx % values.length]
+                return (
+                  <div
+                    key={item.title}
+                    className={`
+                      group bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-7
+                      shadow-soft transition-all duration-500
+                      hover:shadow-elevated hover:-translate-y-1
+                      animate-fade-in-up stagger-${idx + 1}
+                    `}
+                  >
+                    <div className="w-12 h-12 rounded-xl bg-brand-goldLight flex items-center justify-center text-brand-gold mb-5 transition-all duration-300 group-hover:bg-brand-gold group-hover:text-white">
+                      {originalValue?.icon || values[0].icon}
+                    </div>
+                    <h3 className="font-heading text-lg font-bold text-slate-900 dark:text-slate-50 mb-2">
+                      {item.title}
+                    </h3>
+                    <p className="text-slate-700 dark:text-slate-300 text-sm leading-relaxed">
+                      {item.description}
+                    </p>
                   </div>
-                  <h3 className="font-heading text-lg font-bold text-slate-900 dark:text-slate-50 mb-2">
-                    {item.title}
-                  </h3>
-                  <p className="text-slate-700 dark:text-slate-300 text-sm leading-relaxed">
-                    {item.description}
-                  </p>
-                </div>
-              ))}
+                )
+              })}
             </div>
           </Container>
         </section>

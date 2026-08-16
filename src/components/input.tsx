@@ -2,9 +2,10 @@ import type { InputHTMLAttributes, TextareaHTMLAttributes } from "react"
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   label: string
+  helpText?: string
 }
 
-export function Input({ label, id, className = "", ...props }: InputProps) {
+export function Input({ label, id, className = "", helpText, ...props }: InputProps) {
   return (
     <div className="flex flex-col gap-2">
       <label
@@ -28,15 +29,19 @@ export function Input({ label, id, className = "", ...props }: InputProps) {
         `}
         {...props}
       />
+      {helpText && (
+        <p className="text-xs text-slate-500 dark:text-slate-400">{helpText}</p>
+      )}
     </div>
   )
 }
 
 interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
   label: string
+  helpText?: string
 }
 
-export function Textarea({ label, id, className = "", ...props }: TextareaProps) {
+export function Textarea({ label, id, className = "", helpText, ...props }: TextareaProps) {
   return (
     <div className="flex flex-col gap-2">
       <label
@@ -60,6 +65,9 @@ export function Textarea({ label, id, className = "", ...props }: TextareaProps)
         `}
         {...props}
       />
+      {helpText && (
+        <p className="text-xs text-slate-500 dark:text-slate-400">{helpText}</p>
+      )}
     </div>
   )
 }

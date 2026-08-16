@@ -1,52 +1,23 @@
-"use client"
-
-import { useState } from "react"
-import type { FormEvent } from "react"
 import Navbar from "@/components/navbar"
 import Footer from "@/components/footer"
 import Container from "@/components/container"
-import { Input, Textarea } from "@/components/input"
-import Button from "@/components/button"
+import ContactForm from "./ContactForm"
+import { getSiteSettings, getSettingValue } from "@/lib/settings"
 
-export default function ContactPage() {
-  const [submitted, setSubmitted] = useState(false)
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState("")
+export default async function ContactPage() {
+  const settings = await getSiteSettings()
 
-  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
-    e.preventDefault()
-    setLoading(true)
-    setError("")
+  const heading = getSettingValue(settings, "contact.heading", "Let's Start a Conversation")
+  const description = getSettingValue(settings, "contact.description", "Have a project in mind or need expert advice? Reach out to us, and we'll help you build the perfect solution.")
+  
+  const email = getSettingValue(settings, "contact.email", "abidshzhad786@gmail.com")
+  const phone = getSettingValue(settings, "contact.phone", "+971 6 5283763")
+  const mobile = getSettingValue(settings, "contact.mobile", "+971 58 2293724")
+  const address = getSettingValue(settings, "contact.address", "Um Al Tarfa Street, Ibrahim Building, Office No B 168, Floor No 1, Sharjah, UAE")
+  const lat = getSettingValue(settings, "contact.latitude", "25.352892771771778")
+  const lng = getSettingValue(settings, "contact.longitude", "55.38730674229798")
 
-    const formData = new FormData(e.currentTarget)
-    const data = {
-      name: formData.get("name"),
-      email: formData.get("email"),
-      subject: formData.get("subject"),
-      message: formData.get("message"),
-    }
-
-    try {
-      const response = await fetch("/api/contact", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      })
-
-      const result = await response.json()
-
-      if (!response.ok || !result.success) {
-        throw new Error(result.error || "Failed to send message.")
-      }
-
-      setSubmitted(true)
-    } catch (err: any) {
-      console.error(err)
-      setError(err.message || "An error occurred while sending your message.")
-    } finally {
-      setLoading(false)
-    }
-  }
+  const mapUrl = lat && lng ? `https://www.google.com/maps/search/?api=1&query=${lat},${lng}` : null
 
   return (
     <>
@@ -58,11 +29,10 @@ export default function ContactPage() {
               Get in Touch
             </span>
             <h1 className="font-heading text-4xl sm:text-5xl font-bold text-slate-900 dark:text-white animate-fade-in-up">
-              Contact Us
+              {heading}
             </h1>
-            <p className="mt-4 text-slate-600 dark:text-slate-300 text-lg max-w-2xl animate-fade-in-up stagger-1">
-              Looking to become a client? We&apos;d love to hear from you. Drop us a
-              message and we&apos;ll get back to you within 24 hours.
+            <p className="mt-4 text-slate-600 dark:text-slate-300 text-lg max-w-2xl animate-fade-in-up stagger-1 whitespace-pre-wrap">
+              {description}
             </p>
           </Container>
         </section>
@@ -74,71 +44,7 @@ export default function ContactPage() {
               {/* Form */}
               <div className="lg:col-span-3">
                 <div className="bg-white dark:bg-[#161B27] rounded-xl border border-slate-200 dark:border-slate-700/60 p-8 sm:p-10 shadow-soft dark:shadow-none animate-fade-in-up">
-                  {submitted ? (
-                    <div className="text-center py-12 animate-scale-in">
-                      <div className="w-16 h-16 rounded-full bg-brand-goldLight flex items-center justify-center mx-auto mb-6">
-                        <svg className="w-8 h-8 text-brand-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-                        </svg>
-                      </div>
-                      <h3 className="font-heading text-2xl font-bold text-slate-900 dark:text-white mb-2">
-                        Message Sent!
-                      </h3>
-                      <p className="text-slate-600 dark:text-slate-400">
-                        Thank you for reaching out. We&apos;ll be in touch shortly.
-                      </p>
-                      <Button className="mt-6" onClick={() => setSubmitted(false)}>
-                        Send Another Message
-                      </Button>
-                    </div>
-                  ) : (
-                    <form onSubmit={handleSubmit} className="space-y-6">
-                      {error && (
-                        <div className="bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 text-sm p-4 rounded-xl border border-red-100 dark:border-red-800/50 mb-6">
-                          {error}
-                        </div>
-                      )}
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                        <Input
-                          label="Full Name"
-                          id="contact-name"
-                          name="name"
-                          placeholder="John Doe"
-                          required
-                        />
-                        <Input
-                          label="Email Address"
-                          id="contact-email"
-                          name="email"
-                          type="email"
-                          placeholder="john@example.com"
-                          required
-                        />
-                      </div>
-                      <Input
-                        label="Subject"
-                        id="contact-subject"
-                        name="subject"
-                        placeholder="Client Inquiry"
-                      />
-                      <Textarea
-                        label="Message"
-                        id="contact-message"
-                        name="message"
-                        rows={5}
-                        placeholder="Tell us about your company..."
-                        required
-                      />
-                      <Button type="submit" size="lg" className="w-full sm:w-auto" disabled={loading}>
-                        {loading ? "Sending..." : "Send Message"}
-                        {!loading && (
-                          <svg className="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />
-                          </svg>
-                        )}
-                      </Button>
-                    </form>
-                  )}
+                  <ContactForm />
                 </div>
               </div>
  
@@ -147,7 +53,7 @@ export default function ContactPage() {
                 {[
                   {
                     title: "Email Us",
-                    detail: "zainymister@yahoo.com",
+                    detail: email,
                     sub: "We reply within 24 hours",
                     icon: (
                       <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
@@ -157,7 +63,7 @@ export default function ContactPage() {
                   },
                   {
                     title: "Call Us",
-                    detail: "+971 (55) 000-0000",
+                    detail: phone,
                     sub: "Mon – Fri, 9am – 6pm GST",
                     icon: (
                       <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
@@ -166,8 +72,19 @@ export default function ContactPage() {
                     ),
                   },
                   {
+                    title: "Mobile / WhatsApp",
+                    detail: mobile,
+                    sub: "Available 24/7",
+                    icon: (
+                      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 1.5H8.25A2.25 2.25 0 006 3.75v16.5a2.25 2.25 0 002.25 2.25h7.5A2.25 2.25 0 0018 20.25V3.75a2.25 2.25 0 00-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3" />
+                      </svg>
+                    ),
+                  },
+                  {
                     title: "Location",
-                    detail: "Dubai, UAE",
+                    detail: address,
+                    link: mapUrl,
                     sub: "Serving clients in UAE, Oman & Pakistan",
                     icon: (
                       <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
@@ -189,9 +106,15 @@ export default function ContactPage() {
                         <h3 className="font-heading font-bold text-slate-900 dark:text-white">
                           {item.title}
                         </h3>
-                        <p className="mt-1 text-slate-700 dark:text-slate-200 text-sm font-medium">
-                          {item.detail}
-                        </p>
+                        {item.link ? (
+                          <a href={item.link} target="_blank" rel="noopener noreferrer" className="mt-1 text-slate-700 dark:text-slate-200 text-sm font-medium whitespace-pre-wrap hover:text-brand-gold transition-colors inline-block">
+                            {item.detail}
+                          </a>
+                        ) : (
+                          <p className="mt-1 text-slate-700 dark:text-slate-200 text-sm font-medium whitespace-pre-wrap">
+                            {item.detail}
+                          </p>
+                        )}
                         <p className="text-slate-500 dark:text-slate-500 text-xs mt-0.5">
                           {item.sub}
                         </p>

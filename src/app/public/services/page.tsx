@@ -5,10 +5,16 @@ import Container from "@/components/container"
 import Link from "next/link"
 import { createClient } from "@/lib/supabaseServer"
 
-export const metadata: Metadata = {
-  title: "Services",
-  description:
-    "End-to-end digital solutions from ZMAMTECH — web development, mobile apps, UI/UX design, cloud & DevOps, and more.",
+import { getSiteSettings, getSettingValue } from "@/lib/settings"
+
+export async function generateMetadata(): Promise<Metadata> {
+  const settings = await getSiteSettings()
+  const brandName = getSettingValue(settings, "branding.brand_name", "ZMAMTECH")
+  
+  return {
+    title: "Services",
+    description: `End-to-end digital solutions from ${brandName} — web development, mobile apps, UI/UX design, cloud & DevOps, and more.`,
+  }
 }
 
 const fallbackServices = [
