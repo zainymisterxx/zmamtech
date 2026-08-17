@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import Navbar from "@/components/navbar"
 import Footer from "@/components/footer"
 import Container from "@/components/container"
+import PageBanner from "@/components/page-banner"
 import { createClient } from "@/lib/supabaseServer"
 
 import { getSiteSettings, getSettingValue } from "@/lib/settings"
@@ -105,67 +106,29 @@ export default async function AboutPage() {
     { value: "98%", label: "Client Satisfaction" },
   ])
 
-  const bannerImgUrl = getSettingValue(settings, "pages.about_banner_image", "")
 
   return (
     <>
       <Navbar />
       <main>
-        {/* Page Banner */}
-        <section
-          className="relative overflow-hidden bg-slate-50 dark:bg-[#0A0F1E] border-b border-slate-200 dark:border-slate-800"
+        <PageBanner
           id="about-hero"
-          style={{ minHeight: "280px" }}
-        >
-          {bannerImgUrl ? (
-            <div className="absolute inset-0 pointer-events-none z-0">
-              <img
-                src={bannerImgUrl}
-                alt=""
-                className="w-full h-full object-cover object-center"
-              />
-              <div className="absolute inset-0 bg-white/80 dark:bg-[#0A0F1E]/80" />
-            </div>
-          ) : (
-            <div className="absolute inset-0 pointer-events-none z-0">
-              <div className="absolute top-0 right-0 w-[500px] h-[500px] rounded-full bg-brand-gold/10 blur-[120px] -translate-y-1/2 translate-x-1/3" />
-              <div className="absolute bottom-0 left-0 w-[300px] h-[300px] rounded-full bg-brand-gold/5 blur-[80px] translate-y-1/2 -translate-x-1/3" />
-            </div>
-          )}
-          <Container className="relative z-10 flex flex-col justify-center py-20 pt-36">
-            <span className="text-xs font-semibold uppercase tracking-widest text-brand-gold mb-4 block animate-fade-in">
-              About Us
-            </span>
-            <h1 className="font-heading text-4xl sm:text-5xl font-bold text-slate-900 dark:text-white leading-tight animate-fade-in-up">
-              {heading.includes("**") ? (
-                <>
-                  {heading.split("**")[0]}
-                  <span className="text-brand-gold">{heading.split("**")[1]}</span>
-                  {heading.split("**")[2]}
-                </>
-              ) : heading === "Building Digital Success Since 2006" ? (
-                <>
-                  Building <span className="text-brand-gold">Digital Success</span> Since 2006
-                </>
-              ) : (
-                heading
-              )}
-            </h1>
-            {contentParagraphs.slice(0, 1).map((paragraph: string, idx: number) => (
-              <p key={idx} className="mt-5 text-slate-700 dark:text-slate-300 text-lg max-w-2xl leading-relaxed animate-fade-in-up stagger-1">
-                {paragraph.includes("**") ? (
-                  <>
-                    {paragraph.split("**")[0]}
-                    <strong className="text-slate-900 dark:text-white">{paragraph.split("**")[1]}</strong>
-                    {paragraph.split("**")[2]}
-                  </>
-                ) : (
-                  paragraph
-                )}
-              </p>
-            ))}
-          </Container>
-        </section>
+          eyebrow="About Us"
+          title={
+            heading.includes("**") ? (
+              <>
+                {heading.split("**")[0]}
+                <span className="text-brand-gold">{heading.split("**")[1]}</span>
+                {heading.split("**")[2]}
+              </>
+            ) : heading === "Building Digital Success Since 2006" ? (
+              <>Building <span className="text-brand-gold">Digital Success</span> Since 2006</>
+            ) : (
+              heading
+            )
+          }
+          description={contentParagraphs[0]}
+        />
 
         {/* About Content */}
         {contentParagraphs.length > 1 && (

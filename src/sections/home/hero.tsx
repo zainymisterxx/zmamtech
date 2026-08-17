@@ -72,6 +72,13 @@ export default async function HeroSection() {
 
   const whatsappNumber = whatsapp ? (whatsapp as string).replace(/[^0-9]/g, "") : ""
 
+  const isDarkHero = !!bgImgUrl
+  const headingColor = isDarkHero ? "text-white" : "text-slate-900 dark:text-slate-50"
+  const descColor = isDarkHero ? "text-slate-200" : "text-slate-700 dark:text-slate-300"
+  const statNumColor = isDarkHero ? "text-white" : "text-slate-900 dark:text-slate-50"
+  const statTextColor = isDarkHero ? "text-slate-300" : "text-slate-500 dark:text-slate-400"
+  const dividerColor = isDarkHero ? "bg-white/20" : "bg-slate-200 dark:bg-slate-700"
+
   return (
     <section
       className={`relative overflow-hidden bg-white dark:bg-[#0F172A] ${heightClass} ${radiusClass} ${borderClass}`}
@@ -89,20 +96,14 @@ export default async function HeroSection() {
               objectPosition,
             }}
           />
-          {overlayEnabled && (
-            <>
-              <div
-                className="absolute inset-0"
-                style={{ backgroundColor: `rgba(255,255,255,${overlayAlpha})` }}
-              />
-              <div
-                className="absolute inset-0 dark:block hidden"
-                style={{ backgroundColor: `rgba(15,23,42,${overlayAlpha})` }}
-              />
-              {/* Light mode overlay — hide in dark */}
-              <div className="absolute inset-0 dark:hidden" style={{ backgroundColor: `rgba(255,255,255,${overlayAlpha})` }} />
-              <div className="absolute inset-0 bg-gradient-to-t from-white/40 via-transparent to-transparent dark:from-[#0F172A]/60 dark:via-transparent dark:to-transparent" />
-            </>
+          {/* Always-on text-protection gradient — ensures text is readable regardless of CMS overlay setting */}
+          <div className="absolute inset-0 bg-gradient-to-r from-slate-950/80 via-slate-900/50 to-slate-900/10 pointer-events-none" />
+          {/* CMS-controlled extra overlay */}
+          {overlayEnabled && overlayAlpha > 0 && (
+            <div
+              className="absolute inset-0"
+              style={{ backgroundColor: `rgba(2,6,23,${overlayAlpha * 0.6})` }}
+            />
           )}
         </div>
       ) : (
@@ -128,7 +129,7 @@ export default async function HeroSection() {
 
           {/* Headline — responsive clamp typography */}
           <h1
-            className="animate-fade-in-up font-heading font-bold leading-[1.12] tracking-tight text-slate-900 dark:text-slate-50"
+            className={`animate-fade-in-up font-heading font-bold leading-[1.12] tracking-tight ${headingColor}`}
             style={{ fontSize: "clamp(2.25rem, 4vw + 0.5rem, 4rem)", maxWidth: "18ch" }}
           >
             {/* Split heading by ** to add the gold gradient if provided, else use fallback formatting */}
@@ -151,7 +152,7 @@ export default async function HeroSection() {
 
           {/* Subheadline */}
           {descriptionText && (
-            <p className="animate-fade-in-up stagger-2 mt-7 text-base sm:text-lg text-slate-700 dark:text-slate-300 leading-relaxed max-w-2xl whitespace-pre-wrap">
+            <p className={`animate-fade-in-up stagger-2 mt-7 text-base sm:text-lg leading-relaxed max-w-2xl whitespace-pre-wrap ${descColor}`}>
               {descriptionText}
             </p>
           )}
@@ -193,19 +194,19 @@ export default async function HeroSection() {
           </div>
 
           {/* Trust indicators */}
-          <div className="animate-fade-in-up stagger-4 mt-16 flex flex-wrap items-center gap-8 text-slate-500 dark:text-slate-400 text-sm">
+          <div className={`animate-fade-in-up stagger-4 mt-16 flex flex-wrap items-center gap-8 text-sm ${statTextColor}`}>
             <div className="flex items-center gap-2">
-              <span className="font-heading font-bold text-2xl text-slate-900 dark:text-slate-50">{statExperience}</span>
+              <span className={`font-heading font-bold text-2xl ${statNumColor}`}>{statExperience}</span>
               <span>Years of<br />Experience</span>
             </div>
-            <div className="h-8 w-px bg-slate-200 dark:bg-slate-700" />
+            <div className={`h-8 w-px ${dividerColor}`} />
             <div className="flex items-center gap-2">
-              <span className="font-heading font-bold text-2xl text-slate-900 dark:text-slate-50">{statClients}</span>
+              <span className={`font-heading font-bold text-2xl ${statNumColor}`}>{statClients}</span>
               <span>Clients<br />Served</span>
             </div>
-            <div className="h-8 w-px bg-slate-200 dark:bg-slate-700" />
+            <div className={`h-8 w-px ${dividerColor}`} />
             <div className="flex items-center gap-2">
-              <span className="font-heading font-bold text-2xl text-slate-900 dark:text-slate-50">{statCountries}</span>
+              <span className={`font-heading font-bold text-2xl ${statNumColor}`}>{statCountries}</span>
               <span>Countries<br />Served</span>
             </div>
           </div>

@@ -74,49 +74,14 @@ export default async function PublicServicesPage() {
 
   const displayServices = services && services.length > 0 ? services : fallbackServices
 
-  const settings = await getSiteSettings()
-  const bannerImgUrl = getSettingValue(settings, "pages.services_banner_image", "")
+  // Metadata only — no banner-specific settings needed here (PageBanner reads from CMS directly)
 
   return (
     <>
       <Navbar />
       <main>
-        {/* Page Banner */}
-        <section
-          className="relative overflow-hidden bg-slate-50 dark:bg-[#0A0F1E] border-b border-slate-200 dark:border-slate-800"
-          id="services-header"
-          style={{ minHeight: "280px" }}
-        >
-          {bannerImgUrl ? (
-            <div className="absolute inset-0 pointer-events-none z-0">
-              <img
-                src={bannerImgUrl}
-                alt=""
-                className="w-full h-full object-cover object-center"
-              />
-              <div className="absolute inset-0 bg-white/80 dark:bg-[#0A0F1E]/80" />
-            </div>
-          ) : (
-            <div className="absolute inset-0 pointer-events-none z-0">
-              <div className="absolute top-0 right-0 w-[500px] h-[500px] rounded-full bg-brand-gold/10 blur-[120px] -translate-y-1/2 translate-x-1/3" />
-              <div className="absolute bottom-0 left-0 w-[300px] h-[300px] rounded-full bg-brand-gold/5 blur-[80px] translate-y-1/2 -translate-x-1/3" />
-            </div>
-          )}
-          <Container className="relative z-10 flex flex-col justify-center py-20 pt-36">
-            <span className="text-xs font-semibold uppercase tracking-widest text-brand-gold mb-4 block animate-fade-in">
-              What We Do
-            </span>
-            <h1 className="font-heading text-4xl sm:text-5xl font-bold text-slate-900 dark:text-white leading-tight animate-fade-in-up">
-              Our <span className="text-brand-gold">Services</span>
-            </h1>
-            <p className="mt-5 text-slate-700 dark:text-slate-300 text-lg max-w-2xl animate-fade-in-up stagger-1">
-              Comprehensive digital solutions tailored to elevate your business. From concept to deployment, we deliver excellence at every stage.
-            </p>
-          </Container>
-        </section>
-
         {/* Services Grid */}
-        <section className="bg-slate-100 dark:bg-[#0F172A] py-16 sm:py-20" id="services-grid">
+        <section className="bg-slate-100 dark:bg-[#0F172A] py-16 pt-32 sm:py-20 sm:pt-40" id="services-grid">
           <Container>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {displayServices.map((service, index) => (

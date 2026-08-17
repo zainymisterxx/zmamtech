@@ -536,32 +536,70 @@ export default function SettingsForm({ initialData }: SettingsFormProps) {
 
           {activeTab === "banners" && (
             <>
-              <h2 className="text-xl font-heading font-bold text-slate-900 dark:text-white mb-6">Page Banners</h2>
-              <div className="space-y-6">
-                <ImageUploadField
-                  label="About Page Banner"
-                  value={data["pages.about_banner_image"] || ""}
-                  onChange={(val) => handleChange("pages.about_banner_image", val)}
-                  helpText="Background image for the About page."
-                />
-                <ImageUploadField
-                  label="Services Page Banner"
-                  value={data["pages.services_banner_image"] || ""}
-                  onChange={(val) => handleChange("pages.services_banner_image", val)}
-                  helpText="Background image for the Services page."
-                />
-                <ImageUploadField
-                  label="Solutions Page Banner"
-                  value={data["pages.solutions_banner_image"] || ""}
-                  onChange={(val) => handleChange("pages.solutions_banner_image", val)}
-                  helpText="Background image for the Solutions page."
-                />
-                <ImageUploadField
-                  label="Clients Page Banner"
-                  value={data["pages.clients_banner_image"] || ""}
-                  onChange={(val) => handleChange("pages.clients_banner_image", val)}
-                  helpText="Background image for the Clients page."
-                />
+              <h2 className="text-xl font-heading font-bold text-slate-900 dark:text-white mb-1">About Banner</h2>
+              <p className="text-sm text-slate-500 dark:text-slate-400 mb-8">
+                Configure the banner section displayed at the top of the About page.
+              </p>
+              <div className="space-y-8">
+                {/* ── Banner Image ── */}
+                <div className="rounded-2xl border border-slate-200 dark:border-slate-700/60 p-6 space-y-6 bg-slate-50 dark:bg-[#0D1117]/60">
+                  <ImageUploadField
+                    label="Banner Image"
+                    value={data["about.banner_image"] || ""}
+                    onChange={(val) => handleChange("about.banner_image", val)}
+                    helpText="Applies to the About page. Leave empty to use the default premium background."
+                  />
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <SelectField
+                      label="Image Position"
+                      value={data["about.banner_image_position"] || "center"}
+                      onChange={(val) => handleChange("about.banner_image_position", val)}
+                      options={[
+                        { value: "center", label: "Center" },
+                        { value: "top", label: "Top" },
+                        { value: "bottom", label: "Bottom" },
+                        { value: "left", label: "Left" },
+                        { value: "right", label: "Right" },
+                      ]}
+                    />
+                    <SelectField
+                      label="Banner Height"
+                      value={data["about.banner_min_height"] || "medium"}
+                      onChange={(val) => handleChange("about.banner_min_height", val)}
+                      options={[
+                        { value: "small", label: "Small" },
+                        { value: "medium", label: "Medium" },
+                        { value: "large", label: "Large" },
+                      ]}
+                    />
+                  </div>
+                </div>
+
+                {/* ── Overlay ── */}
+                <div className="rounded-2xl border border-slate-200 dark:border-slate-700/60 p-6 space-y-6 bg-slate-50 dark:bg-[#0D1117]/60">
+                  <h3 className="text-sm font-bold uppercase tracking-widest text-brand-gold">Overlay</h3>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <SelectField
+                      label="Overlay"
+                      value={data["about.banner_overlay_enabled"] === false || data["about.banner_overlay_enabled"] === "false" ? "false" : "true"}
+                      onChange={(val) => handleChange("about.banner_overlay_enabled", val === "true")}
+                      options={[
+                        { value: "true", label: "Enabled" },
+                        { value: "false", label: "Disabled" },
+                      ]}
+                    />
+                    <SelectField
+                      label="Overlay Strength"
+                      value={data["about.banner_overlay_strength"] || "medium"}
+                      onChange={(val) => handleChange("about.banner_overlay_strength", val)}
+                      options={[
+                        { value: "low", label: "Low" },
+                        { value: "medium", label: "Medium" },
+                        { value: "high", label: "High" },
+                      ]}
+                    />
+                  </div>
+                </div>
               </div>
             </>
           )}

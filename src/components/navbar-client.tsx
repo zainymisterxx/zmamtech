@@ -55,12 +55,20 @@ export default function NavbarClient({ brandName, logoUrl, whatsapp, lat, lng }:
       <nav className="mx-auto flex max-w-7xl items-center justify-between px-6 sm:px-8 lg:px-12 h-[72px]">
 
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-2 group" id="nav-logo">
+        <Link href="/" className="flex items-center gap-2 group py-1" id="nav-logo">
           {logoUrl ? (
-            <img src={logoUrl} alt={brandName || "Logo"} className="h-8 w-auto object-contain" />
+            <img 
+              src={logoUrl} 
+              alt={brandName || "Logo"} 
+              className="h-10 sm:h-12 w-auto max-w-[200px] sm:max-w-[280px] object-contain" 
+            />
           ) : (
-            <span className="font-heading text-2xl font-bold tracking-tight text-black dark:text-white transition-colors group-hover:text-brand-gold">
-              {brandName || <>ZMAM<span className="text-brand-gold">TECH</span></>}
+            <span className="font-heading text-2xl sm:text-[26px] font-bold tracking-tight text-slate-900 dark:text-white transition-colors group-hover:text-brand-gold flex items-center h-10 sm:h-12">
+              {(!brandName || brandName.toUpperCase().replace(/\s+/g, '') === "ZMAMTECH") ? (
+                <>ZMAM<span className="text-brand-gold">TECH</span></>
+              ) : (
+                brandName
+              )}
             </span>
           )}
         </Link>
