@@ -55,7 +55,16 @@ export default async function AdminServicesPage() {
                   className="border-b border-gray-200 dark:border-neutral-800/50 last:border-0 hover:bg-gray-100 dark:bg-neutral-800/30 transition-colors"
                 >
                   <td className="px-6 py-4">
-                    <span className="text-sm font-medium text-black dark:text-white">{service.title}</span>
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-xl bg-slate-100 dark:bg-neutral-800 border border-slate-200 dark:border-neutral-700 flex items-center justify-center overflow-hidden p-1 shrink-0">
+                        {service.icon ? (
+                          <img src={service.icon} alt="" className="max-w-full max-h-full object-contain" />
+                        ) : (
+                          <span className="text-brand-gold text-xs">Icon</span>
+                        )}
+                      </div>
+                      <span className="text-sm font-medium text-black dark:text-white">{service.title}</span>
+                    </div>
                   </td>
                   <td className="px-6 py-4">
                     <span className="text-sm text-gray-700 dark:text-gray-300">

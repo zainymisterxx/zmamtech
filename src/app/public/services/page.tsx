@@ -6,6 +6,7 @@ import Link from "next/link"
 import { createClient } from "@/lib/supabaseServer"
 
 import { getSiteSettings, getSettingValue } from "@/lib/settings"
+import { getServiceFallbackIcon } from "@/lib/service-icons"
 
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await getSiteSettings()
@@ -74,37 +75,42 @@ export default async function PublicServicesPage() {
 
   const displayServices = services && services.length > 0 ? services : fallbackServices
 
-  // Metadata only — no banner-specific settings needed here (PageBanner reads from CMS directly)
-
   return (
     <>
       <Navbar />
       <main>
         {/* Services Grid */}
-        <section className="bg-slate-100 dark:bg-[#0F172A] py-16 pt-32 sm:py-20 sm:pt-40" id="services-grid">
+        <section className="bg-slate-50 dark:bg-[#0F172A] py-16 pt-32 sm:py-24 sm:pt-40" id="services-grid">
           <Container>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-10">
               {displayServices.map((service, index) => (
                 <div 
                   key={service.id}
-                  className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-10 shadow-soft hover:shadow-hover hover:-translate-y-1 transition-all duration-300 animate-slide-up group"
+                  className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/80 dark:border-slate-800 p-8 sm:p-10 shadow-soft hover:shadow-hover hover:-translate-y-1 transition-all duration-300 animate-slide-up group flex flex-col items-center text-center"
                   style={{ animationDelay: `${index * 100}ms` }}
                 >
-                  <div className="w-14 h-14 rounded-2xl bg-brand-goldLight flex items-center justify-center text-brand-gold mb-8 group-hover:scale-110 group-hover:bg-brand-gold group-hover:text-white transition-all duration-300">
+                  {/* Dedicated Visual/Icon Area (Top Centered) */}
+                  <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200/80 dark:border-slate-700/60 flex items-center justify-center p-4 mb-6 transition-all duration-300 group-hover:scale-105 group-hover:border-brand-gold/50 shadow-sm shrink-0">
                     {service.icon ? (
-                      <img src={service.icon} alt={service.title} className="w-8 h-8 object-contain" style={{ filter: "brightness(0) invert(1)" }} />
+                      <img 
+                        src={service.icon} 
+                        alt={service.title} 
+                        className="max-w-full max-h-full w-auto h-auto object-contain" 
+                      />
                     ) : (
-                      <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
-                      </svg>
+                      <span className="text-brand-gold group-hover:scale-110 transition-transform duration-300">
+                        {getServiceFallbackIcon(service.title)}
+                      </span>
                     )}
                   </div>
                   
-                  <h3 className="font-heading text-2xl font-bold text-slate-900 dark:text-slate-50 mb-4">
+                  {/* Service Title */}
+                  <h3 className="font-heading text-2xl font-bold text-slate-900 dark:text-slate-50 mb-3">
                     {service.title}
                   </h3>
                   
-                  <p className="text-slate-700 dark:text-slate-300 mb-8 leading-relaxed">
+                  {/* Service Description */}
+                  <p className="text-slate-600 dark:text-slate-300 leading-relaxed text-base max-w-md">
                     {service.description}
                   </p>
                 </div>

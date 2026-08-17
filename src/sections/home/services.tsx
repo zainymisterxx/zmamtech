@@ -2,6 +2,7 @@ import Link from "next/link"
 import Container from "@/components/container"
 import Button from "@/components/button"
 import { createClient } from "@/lib/supabaseServer"
+import { getServiceFallbackIcon } from "@/lib/service-icons"
 
 const fallbackServices = [
   {
@@ -95,13 +96,13 @@ export default async function ServicesSection() {
               `}
             >
               {/* Icon */}
-              <div className="w-14 h-14 rounded-2xl bg-brand-goldLight flex items-center justify-center text-brand-gold mb-5 transition-all duration-300 group-hover:bg-brand-gold group-hover:text-white group-hover:scale-110">
+              <div className="w-16 h-16 rounded-2xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200/80 dark:border-slate-700/60 flex items-center justify-center text-brand-gold mb-5 p-3 transition-all duration-300 group-hover:border-brand-gold/40 group-hover:scale-105 shrink-0">
                 {service.icon ? (
-                  <img src={service.icon} alt={service.title} className="w-8 h-8 object-contain" style={{ filter: "brightness(0) invert(1)" }} />
+                  <img src={service.icon} alt={service.title} className="max-w-full max-h-full w-auto h-auto object-contain" />
                 ) : (
-                  <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
-                  </svg>
+                  <span className="text-brand-gold group-hover:scale-110 transition-transform duration-300">
+                    {getServiceFallbackIcon(service.title)}
+                  </span>
                 )}
               </div>
 

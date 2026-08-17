@@ -95,17 +95,59 @@ export default function NewServicePage() {
           />
 
           <div className="flex flex-col gap-3">
-            <label className="text-sm font-medium text-text-secondary">Icon (optional)</label>
-            {iconPreview && (
-              <div className="w-16 h-16 rounded-xl overflow-hidden border-2 border-brand-gold/30 bg-gray-100 dark:bg-neutral-800">
-                <img src={iconPreview} alt="Preview" className="w-full h-full object-contain" />
+            <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Service Icon / Image (optional)</label>
+            {iconPreview ? (
+              <div className="space-y-3">
+                <div className="w-28 h-28 rounded-2xl border-2 border-brand-gold/30 bg-slate-50 dark:bg-neutral-800 flex items-center justify-center p-3 relative group overflow-hidden shadow-sm">
+                  <img src={iconPreview} alt="Preview" className="max-w-full max-h-full object-contain" />
+                  <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2 p-2">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const input = document.getElementById("service-icon-file") as HTMLInputElement
+                        input?.click()
+                      }}
+                      className="px-3 py-1.5 rounded-lg bg-brand-gold text-white text-xs font-semibold hover:bg-brand-goldHover transition"
+                    >
+                      Replace
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setIconFile(null)
+                        setIconPreview(null)
+                        const input = document.getElementById("service-icon-file") as HTMLInputElement
+                        if (input) input.value = ""
+                      }}
+                      className="px-3 py-1.5 rounded-lg bg-red-600 text-white text-xs font-semibold hover:bg-red-700 transition"
+                    >
+                      Remove
+                    </button>
+                  </div>
+                </div>
+                <p className="text-xs text-slate-500">Hover image to Replace or Remove.</p>
+              </div>
+            ) : (
+              <div
+                onClick={() => {
+                  const input = document.getElementById("service-icon-file") as HTMLInputElement
+                  input?.click()
+                }}
+                className="w-full max-w-sm h-32 border-2 border-dashed border-brand-gold/40 hover:border-brand-gold bg-brand-goldLight/20 hover:bg-brand-goldLight/40 dark:bg-brand-gold/5 dark:hover:bg-brand-gold/10 rounded-2xl flex flex-col items-center justify-center cursor-pointer transition-colors p-4"
+              >
+                <svg className="w-8 h-8 text-brand-gold mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+                </svg>
+                <span className="text-sm font-medium text-brand-gold">Click to upload service icon</span>
+                <span className="text-xs text-slate-500 mt-1">PNG, SVG, JPG, WEBP (Max 5MB)</span>
               </div>
             )}
             <input
+              id="service-icon-file"
               type="file"
               accept="image/*"
               onChange={handleIconChange}
-              className="text-sm text-gray-700 dark:text-gray-300 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-brand-goldLight file:text-brand-gold hover:file:bg-brand-gold/20 transition-colors"
+              className="hidden"
             />
           </div>
 
