@@ -2,15 +2,7 @@ import Link from "next/link"
 import Container from "@/components/container"
 import Button from "@/components/button"
 import { createClient } from "@/lib/supabaseServer"
-
-const fallbackClients = [
-  { id: "1", name: "Acme Corp", logo_url: null },
-  { id: "2", name: "Globex Inc", logo_url: null },
-  { id: "3", name: "Soylent Corp", logo_url: null },
-  { id: "4", name: "Initech", logo_url: null },
-  { id: "5", name: "Umbrella Corp", logo_url: null },
-  { id: "6", name: "Dunder Mifflin", logo_url: null },
-]
+import { getSiteSettings, getSettingValue } from "@/lib/settings"
 
 export default async function ClientsSection() {
   let clients: any[] | null = null
@@ -41,7 +33,12 @@ export default async function ClientsSection() {
     }
   }
 
-  const displayClients = clients && clients.length > 0 ? clients : fallbackClients
+  const displayClients = clients && clients.length > 0 ? clients : null
+
+  if (!displayClients) return null
+
+  const settings = await getSiteSettings()
+  const subtitle = getSettingValue(settings, "homepage.clients_subtitle", "Trusted by businesses across UAE, Oman & Pakistan")
 
   return (
     <section className="bg-slate-100 dark:bg-slate-950 py-24 sm:py-32" id="clients-preview">
@@ -54,7 +51,7 @@ export default async function ClientsSection() {
               Our Clients
             </h2>
             <p className="mt-3 text-slate-700 dark:text-slate-300 max-w-lg">
-              Trusted by businesses across UAE, Oman &amp; Pakistan
+              {subtitle}
             </p>
           </div>
           <Link href="/public/clients">
@@ -64,22 +61,22 @@ export default async function ClientsSection() {
           </Link>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-8">
-          {displayClients.map((client, idx) => (
+        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-6">
+          {displayClients.map((client) => (
             <article
               key={client.id}
-              className="group flex flex-col items-center gap-3 p-4"
+              className="group flex flex-col items-center gap-4 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-soft hover:shadow-elevated hover:-translate-y-1 hover:border-brand-gold/30 transition-all duration-300"
             >
-              {/* Circular logo */}
-              <div className="w-20 h-20 rounded-full overflow-hidden border border-gray-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 shadow-soft flex items-center justify-center grayscale opacity-70 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-500">
+              {/* Logo container — rectangular, object-contain, always full color */}
+              <div className="w-full h-24 rounded-xl border border-slate-100 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 flex items-center justify-center p-3 transition-all duration-300 group-hover:border-brand-gold/20">
                 {client.logo_url ? (
                   <img
                     src={client.logo_url}
                     alt={client.name}
-                    className="w-full h-full object-cover"
+                    className="max-w-full max-h-full object-contain"
                   />
                 ) : (
-                  <span className="text-2xl font-bold text-brand-gold uppercase">
+                  <span className="text-3xl font-bold text-brand-gold uppercase select-none">
                     {client.name.charAt(0)}
                   </span>
                 )}

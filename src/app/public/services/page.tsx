@@ -74,48 +74,79 @@ export default async function PublicServicesPage() {
 
   const displayServices = services && services.length > 0 ? services : fallbackServices
 
+  const settings = await getSiteSettings()
+  const bannerImgUrl = getSettingValue(settings, "pages.services_banner_image", "")
+
   return (
     <>
       <Navbar />
-      <main className="pt-32 pb-24 min-h-screen bg-slate-100 dark:bg-[#0F172A]">
-        <Container>
-          <div className="max-w-3xl mb-16 animate-slide-up">
-            <h1 className="font-heading text-5xl font-bold text-slate-900 dark:text-slate-50 mb-6">
+      <main>
+        {/* Page Banner */}
+        <section
+          className="relative overflow-hidden bg-slate-50 dark:bg-[#0A0F1E] border-b border-slate-200 dark:border-slate-800"
+          id="services-header"
+          style={{ minHeight: "280px" }}
+        >
+          {bannerImgUrl ? (
+            <div className="absolute inset-0 pointer-events-none z-0">
+              <img
+                src={bannerImgUrl}
+                alt=""
+                className="w-full h-full object-cover object-center"
+              />
+              <div className="absolute inset-0 bg-white/80 dark:bg-[#0A0F1E]/80" />
+            </div>
+          ) : (
+            <div className="absolute inset-0 pointer-events-none z-0">
+              <div className="absolute top-0 right-0 w-[500px] h-[500px] rounded-full bg-brand-gold/10 blur-[120px] -translate-y-1/2 translate-x-1/3" />
+              <div className="absolute bottom-0 left-0 w-[300px] h-[300px] rounded-full bg-brand-gold/5 blur-[80px] translate-y-1/2 -translate-x-1/3" />
+            </div>
+          )}
+          <Container className="relative z-10 flex flex-col justify-center py-20 pt-36">
+            <span className="text-xs font-semibold uppercase tracking-widest text-brand-gold mb-4 block animate-fade-in">
+              What We Do
+            </span>
+            <h1 className="font-heading text-4xl sm:text-5xl font-bold text-slate-900 dark:text-white leading-tight animate-fade-in-up">
               Our <span className="text-brand-gold">Services</span>
             </h1>
-            <p className="text-lg text-slate-700 dark:text-slate-300">
+            <p className="mt-5 text-slate-700 dark:text-slate-300 text-lg max-w-2xl animate-fade-in-up stagger-1">
               Comprehensive digital solutions tailored to elevate your business. From concept to deployment, we deliver excellence at every stage.
             </p>
-          </div>
+          </Container>
+        </section>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {displayServices.map((service, index) => (
-              <div 
-                key={service.id}
-                className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-10 shadow-soft hover:shadow-hover transition-all duration-300 animate-slide-up group"
-                style={{ animationDelay: `${index * 100}ms` }}
-              >
-                <div className="w-14 h-14 rounded-2xl bg-brand-goldLight flex items-center justify-center text-brand-gold mb-8 group-hover:scale-110 group-hover:bg-brand-gold group-hover:text-white transition-all duration-300">
-                  {service.icon ? (
-                    <img src={service.icon} alt={service.title} className="w-8 h-8 object-contain" style={{ filter: "brightness(0) invert(1)" }} />
-                  ) : (
-                    <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
-                    </svg>
-                  )}
+        {/* Services Grid */}
+        <section className="bg-slate-100 dark:bg-[#0F172A] py-16 sm:py-20" id="services-grid">
+          <Container>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              {displayServices.map((service, index) => (
+                <div 
+                  key={service.id}
+                  className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-10 shadow-soft hover:shadow-hover hover:-translate-y-1 transition-all duration-300 animate-slide-up group"
+                  style={{ animationDelay: `${index * 100}ms` }}
+                >
+                  <div className="w-14 h-14 rounded-2xl bg-brand-goldLight flex items-center justify-center text-brand-gold mb-8 group-hover:scale-110 group-hover:bg-brand-gold group-hover:text-white transition-all duration-300">
+                    {service.icon ? (
+                      <img src={service.icon} alt={service.title} className="w-8 h-8 object-contain" style={{ filter: "brightness(0) invert(1)" }} />
+                    ) : (
+                      <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
+                      </svg>
+                    )}
+                  </div>
+                  
+                  <h3 className="font-heading text-2xl font-bold text-slate-900 dark:text-slate-50 mb-4">
+                    {service.title}
+                  </h3>
+                  
+                  <p className="text-slate-700 dark:text-slate-300 mb-8 leading-relaxed">
+                    {service.description}
+                  </p>
                 </div>
-                
-                <h3 className="font-heading text-2xl font-bold text-slate-900 dark:text-slate-50 mb-4">
-                  {service.title}
-                </h3>
-                
-                <p className="text-slate-700 dark:text-slate-300 mb-8 leading-relaxed">
-                  {service.description}
-                </p>
-              </div>
-            ))}
-          </div>
-        </Container>
+              ))}
+            </div>
+          </Container>
+        </section>
       </main>
       <Footer />
     </>

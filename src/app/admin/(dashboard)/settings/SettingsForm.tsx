@@ -152,6 +152,7 @@ function SelectField({
 const TABS = [
   { id: "branding", label: "Branding" },
   { id: "homepage", label: "Homepage" },
+  { id: "banners", label: "Page Banners" },
   { id: "about", label: "About Page" },
   { id: "contact", label: "Contact Page" },
   { id: "social", label: "Social Links" },
@@ -504,16 +505,19 @@ export default function SettingsForm({ initialData }: SettingsFormProps) {
                 label="Facebook"
                 value={data["social.facebook"] || ""}
                 onChange={(e) => handleChange("social.facebook", e.target.value)}
+                placeholder="https://facebook.com/zmamtech"
               />
               <Input
-                label="Twitter (X)"
-                value={data["social.twitter"] || ""}
-                onChange={(e) => handleChange("social.twitter", e.target.value)}
+                label="Instagram"
+                value={data["social.instagram"] || ""}
+                onChange={(e) => handleChange("social.instagram", e.target.value)}
+                placeholder="https://instagram.com/zmamtech"
               />
               <Input
                 label="LinkedIn"
                 value={data["social.linkedin"] || ""}
                 onChange={(e) => handleChange("social.linkedin", e.target.value)}
+                placeholder="https://linkedin.com/company/zmamtech"
               />
             </>
           )}
@@ -527,6 +531,38 @@ export default function SettingsForm({ initialData }: SettingsFormProps) {
                 onChange={(e) => handleChange("footer.description", e.target.value)}
                 rows={4}
               />
+            </>
+          )}
+
+          {activeTab === "banners" && (
+            <>
+              <h2 className="text-xl font-heading font-bold text-slate-900 dark:text-white mb-6">Page Banners</h2>
+              <div className="space-y-6">
+                <ImageUploadField
+                  label="About Page Banner"
+                  value={data["pages.about_banner_image"] || ""}
+                  onChange={(val) => handleChange("pages.about_banner_image", val)}
+                  helpText="Background image for the About page."
+                />
+                <ImageUploadField
+                  label="Services Page Banner"
+                  value={data["pages.services_banner_image"] || ""}
+                  onChange={(val) => handleChange("pages.services_banner_image", val)}
+                  helpText="Background image for the Services page."
+                />
+                <ImageUploadField
+                  label="Solutions Page Banner"
+                  value={data["pages.solutions_banner_image"] || ""}
+                  onChange={(val) => handleChange("pages.solutions_banner_image", val)}
+                  helpText="Background image for the Solutions page."
+                />
+                <ImageUploadField
+                  label="Clients Page Banner"
+                  value={data["pages.clients_banner_image"] || ""}
+                  onChange={(val) => handleChange("pages.clients_banner_image", val)}
+                  helpText="Background image for the Clients page."
+                />
+              </div>
             </>
           )}
 
